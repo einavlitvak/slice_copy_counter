@@ -176,44 +176,20 @@
       user-select: none;
     }
 
-    /* Progress arc */
-    .progress-ring {
-      position: absolute;
-      inset: 12px;
-      border-radius: 50%;
-    }
 
-    .progress-ring svg {
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
-    }
-
-    .ring-bg {
-      fill: none;
-      stroke: rgba(255,255,255,0.05);
-      stroke-width: 3;
-    }
-    .ring-progress {
-      fill: none;
-      stroke: url(#ringGrad);
-      stroke-width: 3;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.3s ease;
-    }
 
     /* ── Buttons ── */
     .buttons {
       display: flex;
-      gap: 20px;
+      flex-direction: column;
+      gap: 12px;
       width: 100%;
     }
 
     .btn {
-      flex: 1;
-      aspect-ratio: 1;
+      width: 100%;
       border: none;
-      border-radius: 28px;
+      border-radius: 22px;
       font-family: 'Inter', sans-serif;
       font-size: 52px;
       font-weight: 300;
@@ -242,21 +218,11 @@
     }
 
     .btn:active {
-      transform: scale(0.92) !important;
-    }
-
-    .btn-minus {
-      background: linear-gradient(135deg, #1a0a10 0%, #2d0b1a 100%);
-      border: 1px solid rgba(225,29,72,0.25);
-      color: var(--minus);
-      box-shadow: 0 4px 24px rgba(225,29,72,0.12), inset 0 1px 0 rgba(255,255,255,0.04);
-    }
-    .btn-minus:hover {
-      box-shadow: 0 4px 32px var(--minus-glow), inset 0 1px 0 rgba(255,255,255,0.06);
-      transform: translateY(-2px);
+      transform: scale(0.97) !important;
     }
 
     .btn-plus {
+      height: 110px;
       background: linear-gradient(135deg, #130a2a 0%, #1e0a3d 100%);
       border: 1px solid rgba(124,58,237,0.3);
       color: var(--accent2);
@@ -264,7 +230,17 @@
     }
     .btn-plus:hover {
       box-shadow: 0 4px 32px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.06);
-      transform: translateY(-2px);
+    }
+
+    .btn-minus {
+      height: 72px;
+      background: linear-gradient(135deg, #1a0a10 0%, #2d0b1a 100%);
+      border: 1px solid rgba(225,29,72,0.25);
+      color: var(--minus);
+      box-shadow: 0 4px 24px rgba(225,29,72,0.12), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .btn-minus:hover {
+      box-shadow: 0 4px 32px var(--minus-glow), inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
     /* ── N indicator ── */
@@ -489,27 +465,13 @@
   </div>
 
   <div class="count-card" id="countCard">
-    <!-- SVG ring -->
-    <div class="progress-ring">
-      <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#7c3aed"/>
-            <stop offset="100%" stop-color="#a855f7"/>
-          </linearGradient>
-        </defs>
-        <circle class="ring-bg" cx="50" cy="50" r="46"/>
-        <circle class="ring-progress" id="ringProgress" cx="50" cy="50" r="46"/>
-      </svg>
-    </div>
-
     <div class="count-number" id="countNumber">1</div>
     <div class="count-label" id="countLabel">of 10</div>
   </div>
 
   <div class="buttons">
-    <button class="btn btn-minus" id="minusBtn" aria-label="Decrease">−</button>
     <button class="btn btn-plus" id="plusBtn" aria-label="Increase">+</button>
+    <button class="btn btn-minus" id="minusBtn" aria-label="Decrease">−</button>
   </div>
 
   <div class="n-indicator">
@@ -527,7 +489,6 @@
   const countNumber = document.getElementById('countNumber');
   const countLabel  = document.getElementById('countLabel');
   const nBadge      = document.getElementById('nBadge');
-  const ringProgress= document.getElementById('ringProgress');
   const flash       = document.getElementById('flash');
   const modalOverlay= document.getElementById('modalOverlay');
   const nInput      = document.getElementById('nInput');
@@ -538,19 +499,11 @@
   const plusBtn     = document.getElementById('plusBtn');
   const minusBtn    = document.getElementById('minusBtn');
 
-  // Ring circumference
-  const r = 46;
-  const circ = 2 * Math.PI * r;
-  ringProgress.style.strokeDasharray = circ;
-
   // ── Render ──
   function render(animDir) {
     countNumber.textContent = count;
     countLabel.textContent  = `of ${N}`;
     nBadge.textContent      = N;
-
-    const progress = count / N;
-    ringProgress.style.strokeDashoffset = circ * (1 - progress);
 
     // bump animation
     countNumber.classList.remove('bump', 'bump-down');
